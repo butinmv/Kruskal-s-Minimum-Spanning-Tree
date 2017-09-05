@@ -11,10 +11,10 @@ using namespace std;
 // FUNCTION PROTOTYPES
 void inpFile(string fileName);          // reading the file
 void showGraph();                       // display the graph to console
+void sort();                            // edge sorting by weight
 
 
 int countEdges;                                                 // count of edges
-int weight;                                                     // weight of edges
 vector <vector <int> > edges;                                   // graph
 
 
@@ -22,6 +22,11 @@ int main()
 {
     inpFile("input.txt");
     showGraph();
+    
+    cout << endl;
+    sort();
+    showGraph();
+    
     return 0;
 }
 
@@ -34,7 +39,6 @@ void inpFile(string fileName)
         edges[i].clear();
     edges.clear();
     
-    
     int countVertex;        // count of vertex
     ifstream inputFile(fileName);
     if (!inputFile.is_open())
@@ -46,8 +50,28 @@ void inpFile(string fileName)
     for (int i = 0; i < countVertex; i++)
         edges.push_back(*new vector<int>(3));
     
+    // Read start vertex, finish vertex and weight
     for (int i = 0; i < countEdges; i++)
-        inputFile >> edges[i][0] >> edges[i][1] >> edges[i][2];
+        inputFile   >> edges[i][1]      // start vertex
+                    >> edges[i][2]      // finish vertex
+                    >> edges[i][0];     // weight
+    
+    // Close the file
+    inputFile.close();
+}
+
+// Edge sorting by weight
+void sort()
+{
+    for (int i = 0; i < countEdges - 1; i++)
+        for (int j = i + 1; j < countEdges; j++)
+            if (edges[i][0] > edges[j][0])
+                for (int k = 0; k < 3; k++)
+                {
+                    int buf = edges[i][k];
+                    edges[i][k] = edges[j][k];
+                    edges[j][k] = buf;
+                }
 }
 
 // Display the graph to console
@@ -57,7 +81,7 @@ void showGraph ()
     cout << "Count of edges: " << countEdges << endl;
     int sizeGraph = edges.size();
     for (int i = 0; i < sizeGraph; i++)
-    {
-        cout << "Vertex NO. " << edges[i][0] << " is connected with vertext NO. "  << edges[i][1] << " Weight: " << edges[i][2] << endl;
-    }
+        cout    << "Vertex NO. " << edges[i][1]
+                << " is connected with vertext NO. "  << edges[i][2]
+                << ". Weight: " << edges[i][0] << endl;
 }
