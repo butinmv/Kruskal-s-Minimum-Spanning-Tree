@@ -16,6 +16,7 @@ void min_span_tree();                   // find minimal spanning tree
 
 
 int countEdges;                         // count of edges
+int countVertex;                        // count of vertex
 vector <vector <int> > edges;           // graph
 
 
@@ -39,7 +40,8 @@ void inpFile(string fileName)
         edges[i].clear();
     edges.clear();
     
-    int countVertex;        // count of vertex
+    countEdges = 0;
+    countVertex = 0;        // count of vertex
     ifstream inputFile(fileName);
     if (!inputFile.is_open())
         cout << "Error! File is not found!" << endl;
@@ -47,7 +49,7 @@ void inpFile(string fileName)
         inputFile >> countVertex >> countEdges;
     
     // Init edges
-    for (int i = 0; i < countVertex; i++)
+    for (int i = 0; i < countEdges; i++)
         edges.push_back(*new vector<int>(countEdges));
     
     // Read start vertex, finish vertex and weight
@@ -78,9 +80,9 @@ void sort()
 void min_span_tree()
 {
     sort();
-    
-    int size = edges.size();
-    vector<int> tree_id(size);
+
+    vector<int> tree_id(countVertex);
+    int size = tree_id.size();
     for (int i = 0; i < size; ++i)
         tree_id[i] = i;
     
@@ -103,10 +105,11 @@ void min_span_tree()
     cout << "Minimal weight: " << sumWeight;
 }
 
+
 // Display the graph to console
 void showGraph ()
 {
-    cout << "Count of vertex: " << edges.size() << endl;
+    cout << "Count of vertex: " << countVertex << endl;
     cout << "Count of edges: " << countEdges << endl;
     int sizeGraph = edges.size();
     for (int i = 0; i < sizeGraph; i++)
