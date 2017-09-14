@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 
 //local libs
@@ -10,6 +11,52 @@
 using namespace sf;
 using namespace std;
 
+// ---------------------------------------------------------------------
+// ITOA
+void reverse(char str[], int length)
+{
+    int start = 0;
+    int end = length -1;
+    while (start < end)
+    {
+        swap(*(str+start), *(str+end));
+        start++;
+        end--;
+    }
+}
+
+char* itoa(int num, char* str, int base)
+{
+    int i = 0;
+    bool isNegative = false;
+    
+    if (num == 0)
+    {
+        str[i++] = '0';
+        str[i] = '\0';
+        return str;
+    }
+    
+    if (num < 0 && base == 10)
+    {
+        isNegative = true;
+        num = -num;
+    }
+    
+    while (num != 0)
+    {
+        int rem = num % base;
+        str[i++] = (rem > 9)? (rem-10) + 'a' : rem + '0';
+        num = num/base;
+    }
+    
+    if (isNegative)
+        str[i++] = '-';
+    str[i] = '\0';
+    reverse(str, i);
+    return str;
+}
+// ---------------------------------------------------------------------
 
 // FUNCTION PROTOTYPES
 void inpFile(string fileName);          // reading the file
@@ -25,13 +72,17 @@ int countVertex;                        // count of vertex
 vector <vector <int> * > edges;         // graph
 vector<int> way;
 
-// INTERFACE COLOR
+// INTERFACE
+vector<int> x, y;                       // coordinates of vertex
+int r = 500;                            // radius of cycle
+// Color
 Color white = Color(255, 255, 255);
 Color white_100 = Color(255, 255, 255, 100);
 Color white_255 = Color(255, 255, 255, 255);
-Color blue_background = Color(35, 95, 165);
+Color background = Color(35, 95, 165);
 Color line_color = Color(255, 255, 255, 50);
 Color noCycle = Color(24, 67, 117);
+
 
 int main()
 {
@@ -65,6 +116,19 @@ int main()
     
     work();
     
+    // задаем круг для вершины
+    int r = 30;
+    
+    // белый круг, используется в цикле
+    CircleShape shape(r);
+    shape.setOutlineColor(Color::Red);
+    shape.setOutlineThickness(5);
+    shape.setFillColor(Color(0, 0, 0, 0));
+    
+    CircleShape shape2(r);
+    shape2.setOutlineColor(white_255);
+    shape2.setOutlineThickness(5);
+    shape2.setFillColor(Color(0, 0, 0, 0));
     
     while (window.isOpen())
     {
@@ -80,7 +144,63 @@ int main()
             {
                 window.close();
             }
-            window.clear(blue_background);
+            
+            // move vertex
+            if (Mouse::isButtonPressed(Mouse::Left))
+            {
+                for (int i = 0; i < countVertex; i++)
+                {
+                    if (x[i] <= (Mouse::getPosition(window)).x && x[i] >= (Mouse::getPosition(window)).x - 2 * r &&
+                        y[i] <= (Mouse::getPosition(window)).y && y[i] >= (Mouse::getPosition(window)).y - 2 * r)
+                    {
+                        x[i] = (Mouse::getPosition(window)).x - r;
+                        y[i] = (Mouse::getPosition(window)).y - r;
+                        break;
+                    }
+                }
+            }
+            
+            window.clear(background);
+            
+            
+            // display edge
+            for (int i = 0; i < countEdges; i++)
+            {
+                Vertex line[] =
+                {
+                    Vertex(Vector2f(x[(*edges[i])[1] - 1] + r, y[(*edges[i])[1] - 1] + r), white_255),
+                    Vertex(Vector2f(x[(*edges[i])[2] - 1] + r, y[(*edges[i])[2] - 1] + r), white_255)
+                };
+                window.draw(line, 2, Lines);
+            }
+            
+            
+            // display way
+            for (int i = 0; i < way.size(); i = i + 2)
+            {
+                Vertex line[] =
+                {
+                    Vertex(Vector2f(x[way[i] - 1] + r, y[way[i] - 1] + r), Color::Red),
+                    Vertex(Vector2f(x[way[i + 1] - 1] + r, y[way[i + 1] - 1] + r), Color::Red)
+                };
+                window.draw(line, 2, Lines);
+            }
+
+        
+            
+            // display vertex
+            for (int i = 0; i < countVertex; i++)
+            {
+                shape.setPosition(x[i], y[i]);
+                char s[5] = "";
+                itoa(i + 1, s, 10);
+                text.setString(s);
+                text.setPosition(x[i] - 30, y[i] - 30);
+                window.draw(shape);
+                window.draw(text);
+            }
+            
+
             
             
             // Draw the grid
@@ -136,7 +256,22 @@ void inpFile(string fileName)
     for (int i = 0; i < countEdges; i++)
         edges.push_back(new vector<int>(3));
     
-   
+    // вывод по кругу
+    for (int i = 0; i < countVertex; i++)
+    {
+        int xx = 700 - 30 + r * cos(i * 360 / countVertex * M_PI / 180);
+        int yy = 700 - 30 + r * sin(i * 360 / countVertex * M_PI / 180);
+        x.push_back(xx);
+        y.push_back(yy);
+    }
+    
+    for (int i = 0; i < x.size(); i++)
+        cout << x[i] << " ";
+    cout << endl;
+    for (int i = 0; i < y.size(); i++)
+        cout << y[i] << " ";
+    cout << endl;
+    
     // Read start vertex, finish vertex and weight
     for (int i = 0; i < countEdges; i++)
         inputFile   >> (*edges[i])[1]      // start vertex
