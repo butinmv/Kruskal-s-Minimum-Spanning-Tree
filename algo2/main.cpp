@@ -1,12 +1,15 @@
+// system libs
 #include <iostream>
 #include <vector>
 #include <fstream>
-
 #include <SFML/Graphics.hpp>
+
+//local libs
 #include "ResourcePath.hpp"
 
 using namespace sf;
 using namespace std;
+
 
 // FUNCTION PROTOTYPES
 void inpFile(string fileName);          // reading the file
@@ -15,19 +18,19 @@ void sort();                            // edge sorting by weight
 void min_span_tree();                   // find minimal spanning tree
 
 
+
+// GLOBAL VARIABLES
 int countEdges;                         // count of edges
 int countVertex;                        // count of vertex
-vector <vector <int> > edges;           // graph
-
+vector <vector <int> * > edges;         // graph
+vector<int> way;
 
 int main()
 {
     inpFile("input.txt");
     showGraph();
-    
     cout << endl;
     min_span_tree();
-    
     return 0;
 }
 
@@ -37,7 +40,7 @@ void inpFile(string fileName)
     // Clearing the vertices
     int size = edges.size();
     for ( int i = 0; i < size; i++)
-        edges[i].clear();
+        edges[i]->clear();
     edges.clear();
     
     countEdges = 0;
@@ -50,13 +53,14 @@ void inpFile(string fileName)
     
     // Init edges
     for (int i = 0; i < countEdges; i++)
-        edges.push_back(*new vector<int>(countEdges));
+        edges.push_back(new vector<int>(3));
     
+   
     // Read start vertex, finish vertex and weight
     for (int i = 0; i < countEdges; i++)
-        inputFile   >> edges[i][1]      // start vertex
-                    >> edges[i][2]      // finish vertex
-                    >> edges[i][0];     // weight
+        inputFile   >> (*edges[i])[1]      // start vertex
+                    >> (*edges[i])[2]      // finish vertex
+                    >> (*edges[i])[0];     // weight
     
     // Close the file
     inputFile.close();
@@ -67,12 +71,12 @@ void sort()
 {
     for (int i = 0; i < countEdges - 1; i++)
         for (int j = i + 1; j < countEdges; j++)
-            if (edges[i][0] > edges[j][0])
+            if ((*edges[i])[0] > (*edges[j])[0])
                 for (int k = 0; k < 3; k++)
                 {
-                    int buf = edges[i][k];
-                    edges[i][k] = edges[j][k];
-                    edges[j][k] = buf;
+                    int buf = (*edges[i])[k];
+                    (*edges[i])[k] = (*edges[j])[k];
+                    (*edges[j])[k] = buf;
                 }
 }
 
@@ -80,29 +84,43 @@ void sort()
 void min_span_tree()
 {
     sort();
-
+    cout << "After sort" << endl;
+    int sizeGraph = edges.size();
+    for (int i = 0; i < sizeGraph; i++)
+        cout    << "Vertex NO. " << (*edges[i])[1]
+                << " is connected with vertext NO. "  << (*edges[i])[2]
+                << ". Weight: " << (*edges[i])[0] << endl;
+    
     vector<int> tree_id(countVertex);
+    // Помещаем каждую вершину в свое дерево
     int size = tree_id.size();
     for (int i = 0; i < size; ++i)
         tree_id[i] = i;
     
     int sumWeight = 0;
+    // перебор всех ребер
     for (int i = 0; i < countEdges; i++)
     {
-        int weight = edges[i][0];
-        int start  = edges[i][1];
-        int end    = edges[i][2];
+        int weight = (*edges[i])[0];
+        int start  = (*edges[i])[1] - 1;
+        int end    = (*edges[i])[2] - 1;
+        // если у текущего ребра его концы принадлежат разным поддеревьям
         if (tree_id[start] != tree_id[end])
         {
             sumWeight += weight;
+            way.push_back(start + 1);
+            way.push_back(end + 1);
             int a = tree_id[start];
             int b = tree_id[end];
-            for (int i = 0; i < size; i++)
-                if (tree_id[i] == b)
-                    tree_id[i] = a;
+            for (int j = 0; j < size; j++)
+                if (tree_id[j] == b)
+                    tree_id[j] = a;
         }
     }
-    cout << "Minimal weight: " << sumWeight;
+    cout << "Minimal weight: " << sumWeight << endl;
+    cout << "Our prograssive: ";
+    for (int i = 0; i < way.size(); i++)
+        cout << way[i] << " ";
 }
 
 
@@ -113,7 +131,7 @@ void showGraph ()
     cout << "Count of edges: " << countEdges << endl;
     int sizeGraph = edges.size();
     for (int i = 0; i < sizeGraph; i++)
-        cout    << "Vertex NO. " << edges[i][1]
-                << " is connected with vertext NO. "  << edges[i][2]
-                << ". Weight: " << edges[i][0] << endl;
+        cout    << "Vertex NO. " << (*edges[i])[1]
+                << " is connected with vertext NO. "  << (*edges[i])[2]
+                << ". Weight: " << (*edges[i])[0] << endl;
 }

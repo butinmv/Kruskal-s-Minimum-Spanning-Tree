@@ -51,7 +51,6 @@
 			isa = PBXGroup;
 			children = (
 				A239B9F81F5DD16900A55BBE /* main.cpp */,
-				A239B9FA1F5DD16900A55BBE /* Resources */,
 				A239B9F31F5DD16900A55BBE /* Supporting Files */,
 			);
 			path = algo2;
@@ -63,13 +62,6 @@
 				A239B9F41F5DD16900A55BBE /* algo2-Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		A239B9FA1F5DD16900A55BBE /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		A239BA081F5DD18400A55BBE /* ResourcePath */ = {
@@ -298,6 +290,7 @@
 				A239BA071F5DD16900A55BBE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
