@@ -7,6 +7,8 @@
 
 //local libs
 #include "ResourcePath.hpp"
+#include "button.hpp"
+#include "programmObject.hpp"
 
 using namespace sf;
 using namespace std;
@@ -62,8 +64,8 @@ char* itoa(int num, char* str, int base)
 void inpFile(string fileName);          // reading the file
 void showGraph();                       // display the graph to console
 void sort();                            // edge sorting by weight
-void min_span_tree();                   // find minimal spanning tree
-void work();                            // all function
+int min_span_tree();                    // find minimal spanning tree
+int work();                             // all function
 
 
 // GLOBAL VARIABLES
@@ -74,7 +76,7 @@ vector<int> way;
 
 // INTERFACE
 vector<int> x, y;                       // coordinates of vertex
-int r = 500;                            // radius of cycle
+int r = 700;                            // radius of cycle
 // Color
 Color white = Color(255, 255, 255);
 Color white_100 = Color(255, 255, 255, 100);
@@ -83,6 +85,9 @@ Color background = Color(35, 95, 165);
 Color line_color = Color(255, 255, 255, 50);
 Color noCycle = Color(24, 67, 117);
 
+// FLAG BUTTONS
+bool isPressU = 0;
+bool isPressO = 0;
 
 int main()
 {
@@ -92,7 +97,7 @@ int main()
     VideoMode videoMode;
     videoMode.width = 2440;
     videoMode.height = 2160;
-    string name = "Symple cycles";
+    string name = "Minimal spanning tree";
     RenderWindow window(videoMode, name, Style::Close, settings);
     
     // Settings font
@@ -114,7 +119,38 @@ int main()
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     
     
-    work();
+    // найстройки кнопок
+    vector<Button> button;
+    string str = "";
+    char textInfo[1000] = "";
+    
+    Button openFile(40, videoMode.height - 400, 560, 80, white_100, Color(0,0,0), "Open File");
+    button.push_back(openFile);
+    
+    Button update(640, videoMode.height - 400, 560, 80, white_100, Color(0,0,0), "Update");
+    button.push_back(update);
+    
+    Button infouser(40, videoMode.height - 280, 1160, 200, white_100, Color(0,0,0), "Info User\nOPEN FILE - Key O  UPDATE - Key U\n", 0);
+    button.push_back(infouser);
+    
+    Button info(1280, videoMode.height - 400, 1120, 320, white_100, Color(0,0,0), "Minimal weight: ", 0);
+    button.push_back(info);
+    
+    
+    int sumWeight = work();
+    /*
+    text.setPosition(1280, videoMode.height - 400);
+    itoa(sumWeight, textInfo, 10);
+    str = str + textInfo + "\nWay: ";
+    for (int i = 0; i < way.size(); i++)
+    {
+        itoa(way[i], textInfo, 10);
+        str = str + " " + textInfo;
+    }
+    text.setString(str);
+    window.draw(text);
+    */
+
     
     // задаем круг для вершины
     int r = 30;
@@ -130,8 +166,25 @@ int main()
     shape2.setOutlineThickness(5);
     shape2.setFillColor(Color(0, 0, 0, 0));
     
+    
+    
+    
     while (window.isOpen())
     {
+        
+        if (update.update(&window) || (Keyboard::isKeyPressed(Keyboard::U) && !isPressU))
+        {
+           
+            
+            isPressU = 1;
+        }
+        
+        if (openFile.update(&window) || (Keyboard::isKeyPressed(Keyboard::O) && !isPressO))
+        {
+            system("open -a TextEdit input.txt");
+            isPressO = 1;
+        }
+        
         Event event;
         while (window.pollEvent(event))
         {
@@ -160,6 +213,8 @@ int main()
                 }
             }
             
+            
+            
             window.clear(background);
             
             
@@ -171,9 +226,15 @@ int main()
                     Vertex(Vector2f(x[(*edges[i])[1] - 1] + r, y[(*edges[i])[1] - 1] + r), white_255),
                     Vertex(Vector2f(x[(*edges[i])[2] - 1] + r, y[(*edges[i])[2] - 1] + r), white_255)
                 };
+                
+                
+                char s[5] = "";
+                itoa((*edges[i])[0] - 1, s, 10);
+                text.setString(s);
+                text.setPosition((x[(*edges[i])[1] - 1] * 2 + x[(*edges[i])[2] - 1]) / 3 + r, (y[(*edges[i])[1] - 1] * 2 + y[(*edges[i])[2] - 1]) / 3);
                 window.draw(line, 2, Lines);
+                window.draw(text);
             }
-            
             
             // display way
             for (int i = 0; i < way.size(); i = i + 2)
@@ -185,8 +246,6 @@ int main()
                 };
                 window.draw(line, 2, Lines);
             }
-
-        
             
             // display vertex
             for (int i = 0; i < countVertex; i++)
@@ -200,6 +259,7 @@ int main()
                 window.draw(text);
             }
             
+
 
             
             
@@ -226,6 +286,12 @@ int main()
                 };
                 window.draw(line, 2, Lines);
             }
+            
+            
+            // вывод кнопок
+            size = button.size();
+            for(int i = 0; i < size; i++)
+                button[i].draw(window);
             
             
             window.display();
@@ -259,18 +325,11 @@ void inpFile(string fileName)
     // вывод по кругу
     for (int i = 0; i < countVertex; i++)
     {
-        int xx = 700 - 30 + r * cos(i * 360 / countVertex * M_PI / 180);
-        int yy = 700 - 30 + r * sin(i * 360 / countVertex * M_PI / 180);
+        int xx = 1220 - 30 + r * cos(i * 360 / countVertex * M_PI / 180);
+        int yy = 900 - 30 + r * sin(i * 360 / countVertex * M_PI / 180);
         x.push_back(xx);
         y.push_back(yy);
     }
-    
-    for (int i = 0; i < x.size(); i++)
-        cout << x[i] << " ";
-    cout << endl;
-    for (int i = 0; i < y.size(); i++)
-        cout << y[i] << " ";
-    cout << endl;
     
     // Read start vertex, finish vertex and weight
     for (int i = 0; i < countEdges; i++)
@@ -297,7 +356,7 @@ void sort()
 }
 
 // Find minimal spanning tree
-void min_span_tree()
+int min_span_tree()
 {
     sort();
     cout << "After sort" << endl;
@@ -334,6 +393,7 @@ void min_span_tree()
     cout << "Our prograssive: ";
     for (int i = 0; i < way.size(); i++)
         cout << way[i] << " ";
+    return sumWeight;
 }
 
 
@@ -349,10 +409,11 @@ void showGraph()
                 << ". Weight: " << (*edges[i])[0] << endl;
 }
 
-void work()
+int work()
 {
     inpFile("input.txt");
     showGraph();
     cout << endl;
-    min_span_tree();
+    int sumWeight = min_span_tree();
+    return sumWeight;
 }
