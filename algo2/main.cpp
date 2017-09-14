@@ -16,7 +16,7 @@ void inpFile(string fileName);          // reading the file
 void showGraph();                       // display the graph to console
 void sort();                            // edge sorting by weight
 void min_span_tree();                   // find minimal spanning tree
-
+void work();                            // all function
 
 
 // GLOBAL VARIABLES
@@ -25,12 +25,93 @@ int countVertex;                        // count of vertex
 vector <vector <int> * > edges;         // graph
 vector<int> way;
 
+// INTERFACE COLOR
+Color white = Color(255, 255, 255);
+Color white_100 = Color(255, 255, 255, 100);
+Color white_255 = Color(255, 255, 255, 255);
+Color blue_background = Color(35, 95, 165);
+Color line_color = Color(255, 255, 255, 50);
+Color noCycle = Color(24, 67, 117);
+
 int main()
 {
-    inpFile("input.txt");
-    showGraph();
-    cout << endl;
-    min_span_tree();
+    // Setting window
+    ContextSettings settings;
+    settings.antialiasingLevel = 100;
+    VideoMode videoMode;
+    videoMode.width = 2440;
+    videoMode.height = 2160;
+    string name = "Symple cycles";
+    RenderWindow window(videoMode, name, Style::Close, settings);
+    
+    // Settings font
+    Font font;
+    if (!font.loadFromFile("cour.ttf"))
+    {
+        return EXIT_FAILURE;
+    }
+    Text text("", font, 35);
+    text.setFillColor(white);
+    text.setStyle(Text::Bold);
+    
+    // Setting icon
+    Image icon;
+    if (!icon.loadFromFile("icon.png"))
+    {
+        return EXIT_FAILURE;
+    }
+    window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+    
+    
+    work();
+    
+    
+    while (window.isOpen())
+    {
+        Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == Event::Closed)
+            {
+                window.close();
+            }
+            
+            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape)
+            {
+                window.close();
+            }
+            window.clear(blue_background);
+            
+            
+            // Draw the grid
+            int v = 40;
+            int size = videoMode.width / v + 1;
+            for(int j = 0; j < size; j++)
+            {
+                Vertex line[] =
+                {
+                    Vertex(Vector2f(j * v, 0), line_color),
+                    Vertex(Vector2f(j * v, videoMode.height), line_color)
+                };
+                window.draw(line, 2, Lines);
+            }
+            
+            size = videoMode.height / v + 1;
+            for(int j = 0; j < size; j++)
+            {
+                Vertex line[] =
+                {
+                    Vertex(Vector2f(0, j * v), line_color),
+                    Vertex(Vector2f(videoMode.width, j * v), line_color)
+                };
+                window.draw(line, 2, Lines);
+            }
+            
+            
+            window.display();
+        }
+    }
+    
     return 0;
 }
 
@@ -92,19 +173,16 @@ void min_span_tree()
                 << ". Weight: " << (*edges[i])[0] << endl;
     
     vector<int> tree_id(countVertex);
-    // Помещаем каждую вершину в свое дерево
     int size = tree_id.size();
     for (int i = 0; i < size; ++i)
         tree_id[i] = i;
     
     int sumWeight = 0;
-    // перебор всех ребер
     for (int i = 0; i < countEdges; i++)
     {
         int weight = (*edges[i])[0];
         int start  = (*edges[i])[1] - 1;
         int end    = (*edges[i])[2] - 1;
-        // если у текущего ребра его концы принадлежат разным поддеревьям
         if (tree_id[start] != tree_id[end])
         {
             sumWeight += weight;
@@ -125,7 +203,7 @@ void min_span_tree()
 
 
 // Display the graph to console
-void showGraph ()
+void showGraph()
 {
     cout << "Count of vertex: " << countVertex << endl;
     cout << "Count of edges: " << countEdges << endl;
@@ -134,4 +212,12 @@ void showGraph ()
         cout    << "Vertex NO. " << (*edges[i])[1]
                 << " is connected with vertext NO. "  << (*edges[i])[2]
                 << ". Weight: " << (*edges[i])[0] << endl;
+}
+
+void work()
+{
+    inpFile("input.txt");
+    showGraph();
+    cout << endl;
+    min_span_tree();
 }

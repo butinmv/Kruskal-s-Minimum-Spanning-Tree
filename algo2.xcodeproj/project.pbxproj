@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A2020A231F6AC6BE000DD6A5 /* cour.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2020A221F6AC6BE000DD6A5 /* cour.ttf */; };
 		A239B9F61F5DD16900A55BBE /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = A239B9F51F5DD16900A55BBE /* ResourcePath.mm */; };
 		A239B9F91F5DD16900A55BBE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A239B9F81F5DD16900A55BBE /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A2020A221F6AC6BE000DD6A5 /* cour.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = cour.ttf; path = "../../../Лабораторная работа №1 (Все простые циклы в графе)/algo1/algo1/cour.ttf"; sourceTree = "<group>"; };
 		A239B9F01F5DD16900A55BBE /* algo2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = algo2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A239B9F41F5DD16900A55BBE /* algo2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "algo2-Info.plist"; sourceTree = "<group>"; };
 		A239B9F51F5DD16900A55BBE /* ResourcePath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ResourcePath.mm; path = algo2/ResourcePath.mm; sourceTree = "<group>"; };
@@ -30,6 +32,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A2020A211F6AC69F000DD6A5 /* Resourcea */ = {
+			isa = PBXGroup;
+			children = (
+				A2020A221F6AC6BE000DD6A5 /* cour.ttf */,
+			);
+			name = Resourcea;
+			sourceTree = "<group>";
+		};
 		A239B9E61F5DD16900A55BBE = {
 			isa = PBXGroup;
 			children = (
@@ -51,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				A239B9F81F5DD16900A55BBE /* main.cpp */,
+				A2020A211F6AC69F000DD6A5 /* Resourcea */,
 				A239B9F31F5DD16900A55BBE /* Supporting Files */,
 			);
 			path = algo2;
@@ -131,6 +142,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2020A231F6AC6BE000DD6A5 /* cour.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
