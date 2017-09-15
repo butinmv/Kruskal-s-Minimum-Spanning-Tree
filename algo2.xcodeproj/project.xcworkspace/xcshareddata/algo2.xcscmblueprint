@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "DA720BF00665DB21CBDC4BD46E0191B7DD814B22",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "9648B8502BA8D1D2D4C3F77A0FF3AEC8850C0447" : 9223372036854775807,
+    "DA720BF00665DB21CBDC4BD46E0191B7DD814B22" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "EB212E23-900A-48A8-BE65-C5FC9B5CAC1E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "9648B8502BA8D1D2D4C3F77A0FF3AEC8850C0447" : "..\/%D0%9B%D0%B0%D0%B1%D0%BE%D1%80%D0%B0%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F%20%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%E2%84%961%20(%D0%92%D1%81%D0%B5%20%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%8B%D0%B5%20%D1%86%D0%B8%D0%BA%D0%BB%D1%8B%20%D0%B2%20%D0%B3%D1%80%D0%B0%D1%84%D0%B5)\/algo1",
+    "DA720BF00665DB21CBDC4BD46E0191B7DD814B22" : "algo2\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "algo2",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "algo2.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/butinmv\/algo_simple_cycles.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9648B8502BA8D1D2D4C3F77A0FF3AEC8850C0447"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/butinmv\/Kruskal-s-Minimum-Spanning-Tree.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DA720BF00665DB21CBDC4BD46E0191B7DD814B22"
+    }
+  ]
+}

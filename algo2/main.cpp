@@ -121,7 +121,7 @@ int main()
     
     // найстройки кнопок
     vector<Button> button;
-    string str = "";
+    string str = "Minimal weight: ";
     char textInfo[1000] = "";
     
     Button openFile(40, videoMode.height - 400, 560, 80, white_100, Color(0,0,0), "Open File");
@@ -133,24 +133,22 @@ int main()
     Button infouser(40, videoMode.height - 280, 1160, 200, white_100, Color(0,0,0), "Info User\nOPEN FILE - Key O  UPDATE - Key U\n", 0);
     button.push_back(infouser);
     
-    Button info(1280, videoMode.height - 400, 1120, 320, white_100, Color(0,0,0), "Minimal weight: ", 0);
+    Button info(1280, videoMode.height - 400, 1120, 320, white_100, Color(0,0,0), str, 0);
     button.push_back(info);
     
     
     int sumWeight = work();
-    /*
-    text.setPosition(1280, videoMode.height - 400);
     itoa(sumWeight, textInfo, 10);
     str = str + textInfo + "\nWay: ";
+    info.setText(str);
     for (int i = 0; i < way.size(); i++)
     {
         itoa(way[i], textInfo, 10);
-        str = str + " " + textInfo;
+        str = str + textInfo + " ";
+        info.setText(str);
     }
-    text.setString(str);
-    window.draw(text);
-    */
 
+    
     
     // задаем круг для вершины
     int r = 30;
@@ -174,8 +172,18 @@ int main()
         
         if (update.update(&window) || (Keyboard::isKeyPressed(Keyboard::U) && !isPressU))
         {
-           
+            int sumWeight = work();
+            itoa(sumWeight, textInfo, 10);
+            str = str + textInfo + "\nWay: ";
+            info.setText(str);
+            for (int i = 0; i < way.size(); i++)
+            {
+                itoa(way[i], textInfo, 10);
+                str = str + textInfo + " ";
+                info.setText(str);
+            }
             
+
             isPressU = 1;
         }
         
@@ -260,7 +268,7 @@ int main()
             }
             
 
-
+            
             
             
             // Draw the grid
@@ -360,12 +368,7 @@ int min_span_tree()
 {
     sort();
     cout << "After sort" << endl;
-    int sizeGraph = edges.size();
-    for (int i = 0; i < sizeGraph; i++)
-        cout    << "Vertex NO. " << (*edges[i])[1]
-                << " is connected with vertext NO. "  << (*edges[i])[2]
-                << ". Weight: " << (*edges[i])[0] << endl;
-    
+    showGraph();
     vector<int> tree_id(countVertex);
     int size = tree_id.size();
     for (int i = 0; i < size; ++i)
